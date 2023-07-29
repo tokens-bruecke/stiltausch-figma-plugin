@@ -174,7 +174,7 @@ const init = async () => {
         return nodeStyleId === styleId;
       });
 
-      console.log("allMatchingNodes", allMatchingNodes);
+      console.log("allMatchingNodes amount", allMatchingNodes.length);
 
       if (allMatchingNodes.length === 0) {
         showMsg.info("No matching styles in the file 🤷‍♂️");
@@ -203,7 +203,7 @@ const init = async () => {
 
         swappedStylesCount++;
 
-        // node.fills = await fillsCopy;
+        node.fills = await fillsCopy;
       });
 
       figma.ui.postMessage({
@@ -218,40 +218,6 @@ const init = async () => {
         timeout: 3000,
       });
     }
-
-    /* -------------------------------- */
-    /* -- Select elements with style -- */
-    /* -------------------------------- */
-
-    // if (msg.type === "selectElementsWithStyle") {
-    //   const { styleId } = msg;
-
-    //   const allMatchingNodes = allAllowedNodes.filter((node) => {
-    //     const nodeStyleId = node.fillStyleId;
-
-    //     if (typeof nodeStyleId !== "string" || !nodeStyleId) {
-    //       return false;
-    //     }
-
-    //     return nodeStyleId === styleId;
-    //   });
-
-    //   const nodesToSelect = allMatchingNodes.filter((node) => {
-    //     const nodeStyleId = node.fillStyleId;
-
-    //     console.log("nodeStyleId", nodeStyleId);
-
-    //     if (typeof nodeStyleId !== "string" || !nodeStyleId) {
-    //       return false;
-    //     }
-
-    //     return nodeStyleId === styleId;
-    //   });
-
-    //   // console.log("nodesToSelect", nodesToSelect);
-
-    //   figma.currentPage.selection = nodesToSelect;
-    // }
 
     /* ---------------------- */
     /* -- Resize UI height -- */

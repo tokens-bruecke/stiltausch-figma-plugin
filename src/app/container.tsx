@@ -2,16 +2,11 @@ import React, { useState, useEffect } from "react";
 
 import { useDidUpdate } from "../utils/hooks/useDidUpdate";
 
-import { Toast } from "../components/Toast";
 import { LoadingView } from "./LoadingView";
 import { NoLibrariesView } from "./NoLibrariesView";
 import {
   Stack,
-  Tabs,
-  Icon,
   Panel,
-  Input,
-  PanelHeader,
   Text,
   Button,
   ToggleRow,
@@ -162,7 +157,7 @@ const Container = () => {
       }
 
       if (msg.type === "setStyles") {
-        console.log("setStyles", msg.styles);
+        // console.log("setStyles", msg.styles);
 
         setAvaliableStyles(msg.styles);
       }
@@ -175,19 +170,19 @@ const Container = () => {
         console.log("finishSwap");
         setIsSwapping(false);
 
+        // remove selected style from avaliable styles
         if (isSwapManually) {
-          // remove selected style from avaliable styles
+          // console.log("avaliableStyles", avaliableStyles);
           const newAvaliableStyles = avaliableStyles.filter((style) => {
-            console.log(style.id, selectedStyle);
             return style.id !== selectedStyle;
           });
 
           setAvaliableStyles(newAvaliableStyles);
-          console.log("newAvaliableStyles", newAvaliableStyles);
+          // console.log("newAvaliableStyles", newAvaliableStyles);
         }
       }
     };
-  }, [isSwapManually]);
+  }, [isSwapManually, avaliableStyles, selectedStyle]);
 
   useEffect(() => {
     parent.postMessage(
@@ -282,10 +277,6 @@ const Container = () => {
       return <LoadingView />;
     }
 
-    // if (!fileHasVariables) {
-    //   return <EmptyView setFileHasVariables={setFileHasVariables} />;
-    // }
-
     return (
       <Stack hasLeftRightPadding={false}>
         {collections.length === 0 && (
@@ -366,18 +357,18 @@ const Container = () => {
               <Panel hasLeftRightPadding>{renderStylesSection()}</Panel>
             )}
 
-            {/* {isSwapManually && avaliableStyles.length > 0 && (
+            {isSwapManually && avaliableStyles.length > 0 && (
               <Panel hasLeftRightPadding>
                 <Stack hasTopBottomPadding>
                   <Button
-                    label="Select elements with this style"
+                    label="Refetch styles"
                     secondary
                     onClick={() => {
                       parent.postMessage(
                         {
                           pluginMessage: {
-                            type: "selectElementsWithStyle",
-                            styleId: selectedStyle,
+                            type: "getStyles",
+                            isSwapForPage,
                           },
                         },
                         "*"
@@ -387,7 +378,7 @@ const Container = () => {
                   />
                 </Stack>
               </Panel>
-            )} */}
+            )}
 
             <Panel hasLeftRightPadding>
               <Stack hasTopBottomPadding>
