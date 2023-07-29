@@ -162,8 +162,6 @@ const init = async () => {
 
       isSwapPageOnly = isSwapForPage;
 
-      // const allAllowedNodes = getAllowedNodes(allNodes);
-
       const allMatchingNodes = allAllowedNodes.filter((node) => {
         const nodeStyleId = node.fillStyleId;
 
