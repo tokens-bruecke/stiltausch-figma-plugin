@@ -9,7 +9,7 @@ console.clear();
 figma.skipInvisibleInstanceChildren = true;
 figma.showUI(__html__, {
   width: config.frameWidth,
-  height: 240,
+  height: 260,
   themeColors: true,
 });
 
@@ -223,35 +223,35 @@ const init = async () => {
     /* -- Select elements with style -- */
     /* -------------------------------- */
 
-    if (msg.type === "showElementsWithStyle") {
-      const { styleId } = msg;
+    // if (msg.type === "selectElementsWithStyle") {
+    //   const { styleId } = msg;
 
-      const allMatchingNodes = allAllowedNodes.filter((node) => {
-        const nodeStyleId = node.fillStyleId;
+    //   const allMatchingNodes = allAllowedNodes.filter((node) => {
+    //     const nodeStyleId = node.fillStyleId;
 
-        if (typeof nodeStyleId !== "string" || !nodeStyleId) {
-          return false;
-        }
+    //     if (typeof nodeStyleId !== "string" || !nodeStyleId) {
+    //       return false;
+    //     }
 
-        return nodeStyleId === styleId;
-      });
+    //     return nodeStyleId === styleId;
+    //   });
 
-      const nodesToSelect = allMatchingNodes.filter((node) => {
-        const nodeStyleId = node.fillStyleId;
+    //   const nodesToSelect = allMatchingNodes.filter((node) => {
+    //     const nodeStyleId = node.fillStyleId;
 
-        console.log("nodeStyleId", nodeStyleId);
+    //     console.log("nodeStyleId", nodeStyleId);
 
-        if (typeof nodeStyleId !== "string" || !nodeStyleId) {
-          return false;
-        }
+    //     if (typeof nodeStyleId !== "string" || !nodeStyleId) {
+    //       return false;
+    //     }
 
-        return nodeStyleId === styleId;
-      });
+    //     return nodeStyleId === styleId;
+    //   });
 
-      // console.log("nodesToSelect", nodesToSelect);
+    //   // console.log("nodesToSelect", nodesToSelect);
 
-      figma.currentPage.selection = nodesToSelect;
-    }
+    //   figma.currentPage.selection = nodesToSelect;
+    // }
 
     /* ---------------------- */
     /* -- Resize UI height -- */

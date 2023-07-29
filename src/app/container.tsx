@@ -174,9 +174,20 @@ const Container = () => {
       if (msg.type === "finishSwap") {
         console.log("finishSwap");
         setIsSwapping(false);
+
+        if (isSwapManually) {
+          // remove selected style from avaliable styles
+          const newAvaliableStyles = avaliableStyles.filter((style) => {
+            console.log(style.id, selectedStyle);
+            return style.id !== selectedStyle;
+          });
+
+          setAvaliableStyles(newAvaliableStyles);
+          console.log("newAvaliableStyles", newAvaliableStyles);
+        }
       }
     };
-  }, []);
+  }, [isSwapManually]);
 
   useEffect(() => {
     parent.postMessage(
@@ -355,17 +366,17 @@ const Container = () => {
               <Panel hasLeftRightPadding>{renderStylesSection()}</Panel>
             )}
 
-            {isSwapManually && avaliableStyles.length > 0 && (
+            {/* {isSwapManually && avaliableStyles.length > 0 && (
               <Panel hasLeftRightPadding>
                 <Stack hasTopBottomPadding>
                   <Button
-                    label="Show elements with this style"
+                    label="Select elements with this style"
                     secondary
                     onClick={() => {
                       parent.postMessage(
                         {
                           pluginMessage: {
-                            type: "showElementsWithStyle",
+                            type: "selectElementsWithStyle",
                             styleId: selectedStyle,
                           },
                         },
@@ -376,7 +387,7 @@ const Container = () => {
                   />
                 </Stack>
               </Panel>
-            )}
+            )} */}
 
             <Panel hasLeftRightPadding>
               <Stack hasTopBottomPadding>
