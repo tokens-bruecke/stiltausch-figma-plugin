@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  overflow: hidden;
+  height: auto;
+
+  // hide the scrollbar
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.toggleRowDescription {
+  opacity: var(--opacity-50);
+  // max-width: 200px;
+}

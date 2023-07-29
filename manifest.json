@@ -1,0 +1,15 @@
+{
+  "name": "StilTausch ✷ Swap styles with variables",
+  "id": "xxx",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "editorType": ["figma"],
+  "ui": "dist/ui.html",
+  "permissions": ["teamlibrary"],
+  "networkAccess": {
+    "allowedDomains": [
+      "https://fonts.gstatic.com",
+      "https://fonts.googleapis.com"
+    ]
+  }
+}
