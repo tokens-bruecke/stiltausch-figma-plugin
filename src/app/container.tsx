@@ -25,6 +25,7 @@ const Container = () => {
   const wrapperRef = React.useRef(null);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isSwapping, setIsSwapping] = useState(false);
 
   const [isSwapManually, setIsSwapManually] = useState(false);
   const [isSwapForPage, setIsSwapForPage] = useState(config.isSwapForPage);
@@ -52,10 +53,7 @@ const Container = () => {
   );
   const [selectedStyle, setSelectedStyle] = useState("");
   const [selectedVariable, setSelectedVariable] = useState(
-    null as {
-      key: string;
-      name: string;
-    } | null
+    null as string | null
   );
 
   /* ----------------------- */
@@ -87,11 +85,13 @@ const Container = () => {
   };
 
   const handleStyleChange = (value) => {
-    // console.log(value);
+    console.log(value);
     setSelectedStyle(value);
   };
 
   const handleSwap = () => {
+    setIsSwapping(true);
+
     if (isSwapManually) {
       parent.postMessage(
         {
@@ -99,7 +99,7 @@ const Container = () => {
             type: "swapManually",
             isSwapForPage,
             collectionKey: selectedCollection.key,
-            variableKey: selectedVariable.key,
+            variableKey: selectedVariable,
             styleId: selectedStyle,
           },
         },
@@ -124,20 +124,23 @@ const Container = () => {
   /* ----------------------- */
 
   useDidUpdate(() => {
-    // if selected collection is changed
-    // also reset selected variable
-    setSelectedVariable(
-      {
-        key: selectedCollection.variables[0].key,
-        name: selectedCollection.variables[0].name,
-      } || null
-    );
-  }, [selectedCollection]);
-
-  useDidUpdate(() => {
     // reset avaliable styles if isSwapForPage is changed
     setAvaliableStyles([]);
   }, [isSwapForPage]);
+
+  useEffect(() => {
+    if (collections.length === 0) {
+      return;
+    }
+    setSelectedVariable(selectedCollection.variables[0].key);
+  }, [selectedCollection]);
+
+  useEffect(() => {
+    if (avaliableStyles.length === 0) {
+      return;
+    }
+    setSelectedStyle(avaliableStyles[0].id);
+  }, [avaliableStyles]);
 
   useEffect(() => {
     window.onmessage = (event) => {
@@ -153,10 +156,7 @@ const Container = () => {
 
         setCollections(msg.collections);
         setSelectedCollection(msg.collections[0]);
-        setSelectedVariable({
-          key: msg.collections[0].variables[0].key,
-          name: msg.collections[0].variables[0].name,
-        });
+        setSelectedVariable(msg.collections[0].variables[0].key);
 
         setIsLoading(false);
       }
@@ -164,24 +164,16 @@ const Container = () => {
       if (msg.type === "setStyles") {
         console.log("setStyles", msg.styles);
 
-        // if (msg.styles.length === 0) {
-        //   toastRef.current.show({
-        //     title: "No styles found",
-        //     message: `No styles found in ${isSwapForPage ? "page" : "file"}`,
-        //     options: {
-        //       type: "error",
-        //       timeout: 3000,
-        //     },
-        //   });
-        // }
-
         setAvaliableStyles(msg.styles);
       }
 
       if (msg.type === "resetStyles") {
-        console.log("resetStyles", msg.styles);
-
         setAvaliableStyles([]);
+      }
+
+      if (msg.type === "finishSwap") {
+        console.log("finishSwap");
+        setIsSwapping(false);
       }
     };
   }, []);
@@ -332,6 +324,7 @@ const Container = () => {
                   label="Collection"
                   value={selectedCollection.key}
                   options={collections.map((collection) => {
+                    // console.log(collection);
                     return {
                       label: collection.name,
                       id: collection.key,
@@ -344,7 +337,7 @@ const Container = () => {
                   <>
                     <NativeDropdown
                       label="Variable"
-                      value={selectedVariable.key}
+                      value={selectedVariable}
                       options={selectedCollection.variables.map((variable) => {
                         return {
                           label: variable.name,
@@ -362,9 +355,33 @@ const Container = () => {
               <Panel hasLeftRightPadding>{renderStylesSection()}</Panel>
             )}
 
+            {isSwapManually && avaliableStyles.length > 0 && (
+              <Panel hasLeftRightPadding>
+                <Stack hasTopBottomPadding>
+                  <Button
+                    label="Show elements with this style"
+                    secondary
+                    onClick={() => {
+                      parent.postMessage(
+                        {
+                          pluginMessage: {
+                            type: "showElementsWithStyle",
+                            styleId: selectedStyle,
+                          },
+                        },
+                        "*"
+                      );
+                    }}
+                    fullWidth
+                  />
+                </Stack>
+              </Panel>
+            )}
+
             <Panel hasLeftRightPadding>
               <Stack hasTopBottomPadding>
                 <Button
+                  loading={isSwapping}
                   disabled={isSwapCTAEnabled}
                   label="Swap"
                   onClick={handleSwap}
