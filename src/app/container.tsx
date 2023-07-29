@@ -70,9 +70,9 @@ const Container = () => {
     } | null
   );
 
-  //////////////////////
-  // HANDLE FUNCTIONS //
-  //////////////////////
+  /* ----------------------- */
+  /* --- EVENT HANDLERS ---- */
+  /* ----------------------- */
 
   const handleLibraryTypeChange = (value) => {
     // console.log(value);
@@ -113,7 +113,7 @@ const Container = () => {
       parent.postMessage(
         {
           pluginMessage: {
-            type: "swap-manually",
+            type: "swapManually",
             isSwapForPage,
             libraryType,
             collectionKey: selectedCollection.key,
@@ -127,7 +127,7 @@ const Container = () => {
       parent.postMessage(
         {
           pluginMessage: {
-            type: "swap-all",
+            type: "swapAll",
             libraryType,
             isSwapForPage,
             collectionKey: selectedCollection.key,
@@ -138,9 +138,9 @@ const Container = () => {
     }
   };
 
-  /////////////////
-  // USE EFFECTS //
-  /////////////////
+  /* ----------------------- */
+  /* --- USE EFFECTS ------- */
+  /* ----------------------- */
 
   useDidUpdate(() => {
     // if selected collection is changed
@@ -217,6 +217,8 @@ const Container = () => {
     );
 
     setIsLoading(true);
+    setAvaliableStyles([]);
+    setCollections([]);
   }, [libraryType]);
 
   // RESIZE VIEW
@@ -245,9 +247,9 @@ const Container = () => {
     };
   }, []);
 
-  /////////////////////
-  // RENDER FUNCTION //
-  /////////////////////
+  /* ----------------------- */
+  /* --- RENDER VIEW ------- */
+  /* ----------------------- */
 
   const renderStylesSection = () => {
     if (avaliableStyles.length === 0) {
@@ -313,7 +315,7 @@ const Container = () => {
           >
             <NativeDropdown
               label="Library type"
-              value={libraryTypes[0].id}
+              value={libraryType}
               options={libraryTypes.map((libraryType) => {
                 return {
                   label: libraryType.label,
