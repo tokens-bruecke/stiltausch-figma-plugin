@@ -1,6 +1,8 @@
 import { getVariablesInLibraryCollection } from "./getVariablesInLibraryCollection";
 
-export async function getCleanTeamCollections(collections) {
+export async function getCleanTeamCollections(
+  collections: LibraryVariableCollection[]
+) {
   const filteredCollections = await Promise.all(
     collections.map(async (collection) => {
       const collectionVariables = await getVariablesInLibraryCollection(

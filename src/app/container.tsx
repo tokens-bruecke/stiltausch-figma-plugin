@@ -4,7 +4,7 @@ import { useDidUpdate } from "../utils/hooks/useDidUpdate";
 
 import { Toast } from "../components/Toast";
 import { LoadingView } from "./LoadingView";
-import { NoLibrariesContainer } from "../components/NoLibrariesContainer";
+import { NoLibrariesView } from "./NoLibrariesView";
 import {
   Stack,
   Tabs,
@@ -20,24 +20,12 @@ import {
 import styles from "./styles.module.scss";
 import { config } from "../utils/config";
 
-const libraryTypes = [
-  {
-    label: "Team Library",
-    id: "team",
-  },
-  {
-    label: "Local Library",
-    id: "local",
-  },
-];
-
 const Container = () => {
   // const toastRef = React.useRef(null);
   const wrapperRef = React.useRef(null);
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [libraryType, setLibraryType] = useState(libraryTypes[0].id);
   const [isSwapManually, setIsSwapManually] = useState(false);
   const [isSwapForPage, setIsSwapForPage] = useState(config.isSwapForPage);
 
@@ -73,11 +61,6 @@ const Container = () => {
   /* ----------------------- */
   /* --- EVENT HANDLERS ---- */
   /* ----------------------- */
-
-  const handleLibraryTypeChange = (value) => {
-    // console.log(value);
-    setLibraryType(value);
-  };
 
   const handleSwapAllChange = (value) => {
     // console.log(value);
@@ -115,7 +98,6 @@ const Container = () => {
           pluginMessage: {
             type: "swapManually",
             isSwapForPage,
-            libraryType,
             collectionKey: selectedCollection.key,
             variableKey: selectedVariable.key,
             styleId: selectedStyle,
@@ -128,7 +110,6 @@ const Container = () => {
         {
           pluginMessage: {
             type: "swapAll",
-            libraryType,
             isSwapForPage,
             collectionKey: selectedCollection.key,
           },
@@ -210,16 +191,13 @@ const Container = () => {
       {
         pluginMessage: {
           type: "getCollections",
-          libraryType,
         },
       },
       "*"
     );
 
     setIsLoading(true);
-    setAvaliableStyles([]);
-    setCollections([]);
-  }, [libraryType]);
+  }, []);
 
   // RESIZE VIEW
   // Check if the view was changed
@@ -307,35 +285,9 @@ const Container = () => {
 
     return (
       <Stack hasLeftRightPadding={false}>
-        <Panel hasLeftRightPadding>
-          <Stack
-            hasRightPadding
-            hasLeftRightPadding={false}
-            hasTopBottomPadding
-          >
-            <NativeDropdown
-              label="Library type"
-              value={libraryType}
-              options={libraryTypes.map((libraryType) => {
-                return {
-                  label: libraryType.label,
-                  id: libraryType.id,
-                };
-              })}
-              onChange={handleLibraryTypeChange}
-            />
-          </Stack>
-        </Panel>
-
         {collections.length === 0 && (
           <Panel>
-            <NoLibrariesContainer
-              label={
-                libraryType === "team"
-                  ? "No team libraries found"
-                  : "No local libraries found"
-              }
-            />
+            <NoLibrariesView label={"No team libraries found"} />
           </Panel>
         )}
 
@@ -394,7 +346,6 @@ const Container = () => {
                       label="Variable"
                       value={selectedVariable.key}
                       options={selectedCollection.variables.map((variable) => {
-                        // console.log("selectedCollection", selectedCollection);
                         return {
                           label: variable.name,
                           id: variable.key,

@@ -1,52 +1,36 @@
 import { getAllowedNodes } from "../utils/getAllowedNodes";
 import { getTeamLibraryCollections } from "../utils/getTeamLibraryCollections";
 import { getCleanTeamCollections } from "../utils/getCleanTeamCollections";
-import { getCleanLocalCollections } from "../utils/getCleanLocalCollections";
 import { getAllUniqueStyles } from "../utils/getAllUniqueStyles";
 import { config } from "../utils/config";
 
 console.clear();
 figma.skipInvisibleInstanceChildren = true;
 figma.showUI(__html__, {
-  width: 300,
+  width: config.frameWidth,
   height: 240,
   themeColors: true,
 });
 
 const init = async () => {
-  let teamLibraryCollections = [] as LibraryVariableCollection[];
-  let localLibraryCollections = [] as VariableCollection[];
-  let allAllowedNodes = [] as (SceneNode | PageNode)[];
+  let cleanTeamCollections = [] as {
+    key: string;
+    name: string;
+    variables: LibraryVariable[];
+  }[];
   let isSwapForPage = config.isSwapForPage;
 
   figma.ui.onmessage = async (msg) => {
     if (msg.type === "getCollections") {
-      /* TEAM LIBRARY TYPE */
-      if (msg.libraryType === "team") {
-        teamLibraryCollections = await getTeamLibraryCollections();
-        const cleanFromEmptyCollections = await getCleanTeamCollections(
-          teamLibraryCollections
-        );
-        figma.ui.postMessage({
-          type: "setCollections",
-          collections: cleanFromEmptyCollections,
-        });
-      }
+      const teamLibraryCollections = await getTeamLibraryCollections();
+      cleanTeamCollections = await getCleanTeamCollections(
+        teamLibraryCollections
+      );
 
-      /* LOCAL LIBRARY TYPE */
-      if (msg.libraryType === "local") {
-        localLibraryCollections = figma.variables.getLocalVariableCollections();
-        const filteredCollections = getCleanLocalCollections(
-          localLibraryCollections
-        );
-        const cleanFromEmptyCollections = filteredCollections.filter(
-          (collection) => collection.variables.length > 0
-        );
-        figma.ui.postMessage({
-          type: "setCollections",
-          collections: cleanFromEmptyCollections,
-        });
-      }
+      figma.ui.postMessage({
+        type: "setCollections",
+        collections: cleanTeamCollections,
+      });
     }
 
     if (msg.type === "getStyles") {
@@ -55,7 +39,7 @@ const init = async () => {
         ? figma.currentPage.findAll()
         : figma.root.findAll();
 
-      allAllowedNodes = getAllowedNodes(allNodes);
+      const allAllowedNodes = getAllowedNodes(allNodes);
       const allUniqueStyles = await getAllUniqueStyles(allAllowedNodes);
 
       if (allUniqueStyles.length === 0) {
@@ -73,30 +57,32 @@ const init = async () => {
     }
 
     if (msg.type === "swapAll") {
-      const { libraryType, isSwapForPage, collectionKey } = msg;
+      console.log("cleanTeamCollections", cleanTeamCollections);
       const allNodes = isSwapForPage
         ? figma.currentPage.findAll()
         : figma.root.findAll();
 
-      allAllowedNodes = getAllowedNodes(allNodes);
+      const allAllowedNodes = getAllowedNodes(allNodes);
 
-      if (allAllowedNodes.length === 0) {
-        figma.notify("No styles found", {
-          timeout: 3000,
-          error: true,
-        });
-        return;
+      for (const node of allAllowedNodes) {
+        const styleId = node.fillStyleId;
+
+        if (typeof styleId !== "string") {
+          // Instead of a return statement, continue to the next iteration
+          continue;
+        }
+
+        const style = figma.getStyleById(styleId);
+        const styleName = style?.name;
+
+        console.log("styleName", styleName);
+
+        // // TODO: check if we can delete this
+        // if (styleName === undefined) {
+        //   // Instead of a return statement, continue to the next iteration
+        //   continue;
+        // }
       }
-
-      const collection =
-        libraryType === "team"
-          ? teamLibraryCollections.find(
-              (collection) => collection.key === collectionKey
-            )
-          : localLibraryCollections.find(
-              (collection) => collection.key === collectionKey
-            );
-      console.log(collection);
     }
 
     if (msg.type === "resizeUIHeight") {
