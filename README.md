@@ -6,9 +6,9 @@ StilTausch is a Figma plugin that allows you to swap styles with variables.
 
 ### ⚠️ Restrictions
 
-1. This plugin works only with team libraries. Which means you need publish your library before you can swap styles.
+1. This plugin works only with team libraries, which means you need to publish your library before you can swap styles.
 2. The plugin swaps only color styles.
-3. Doens't work with INSTANCE components.
+3. Doesn't work with INSTANCE components.
 
 ---
 
@@ -24,7 +24,7 @@ StilTausch is a Figma plugin that allows you to swap styles with variables.
 
 ### Run for the current page
 
-It's on by default. The plugin will swap styles withing the current page only. It's recomended to heavy files. In this case the plugin will run faster. But if you want to swap styles in the whole file, you can turn this option off, which can be a bit slower.
+It's on by default. The plugin will swap styles within the current page only. It's recommended for heavy files. In this case, the plugin will run faster. But if you want to swap styles in the whole file, you can turn this option off, which can be a bit slower.
 
 ### Swap manually
 
@@ -46,15 +46,15 @@ If you switch on the `Swap manually` option, there will be new options available
 
 ### "Variable" select
 
-With this option you can select a variable that you want to swap with. The plugin will swap styles with the selected variable. All variables fetched from the selected collection.
+With this option, you can select a variable that you want to swap with. The plugin will swap styles with the selected variable. All variables fetched from the selected collection.
 
 ### "Style to swap" select
 
 ![fig.3](./readme-assets/fig3.webp)
 
-Before you can select a style to swap, you need to fetch styles. The plugin doesn't fetch styles automatically, because it can be slow if the file or a page is heavy.
+Before you can select a style to swap, you need to fetch styles. The plugin doesn't fetch styles automatically because it can be slow if the file or a page is heavy.
 
-After you click the `Get all styles` button, the plugin will fetch styles from the page of file (depends on the `Run for the current page` option).
+After you click the `Get all styles` button, the plugin will fetch styles from the page or file (depends on the `Run for the current page` option).
 
 ![fig.4](./readme-assets/fig4.webp)
 
