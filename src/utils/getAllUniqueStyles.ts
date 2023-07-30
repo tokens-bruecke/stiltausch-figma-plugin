@@ -13,6 +13,11 @@ export async function getAllUniqueStyles(nodes) {
   const allUniqueStyles = await Promise.all(
     Array.from(styleCounts).map(async ([styleId, count]) => {
       const style = figma.getStyleById(styleId);
+
+      if (!style) {
+        return null;
+      }
+
       return {
         id: styleId,
         name: `${style.name} (${count})`,
@@ -20,5 +25,9 @@ export async function getAllUniqueStyles(nodes) {
     })
   );
 
-  return allUniqueStyles;
+  const clearNulls = allUniqueStyles.filter((style) => style !== null);
+
+  console.log("allUniqueStyles", clearNulls);
+
+  return clearNulls;
 }

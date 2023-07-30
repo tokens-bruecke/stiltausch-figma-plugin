@@ -67,3 +67,11 @@ If you want to fetch styles again, you can click the `Refetch styles` button. It
 ## Feedback
 
 If you have any questions or suggestions, feel free to leave a comment on the [plugin page](https://www.figma.com/community/plugin/1265414931203814032) or [create an issue](https://github.com/PavelLaptev/StilTausch-Swap-styles-with-variables/issues) on GitHub.
+
+---
+
+## Changelog
+
+### 1.0.1
+
+- Fixed a null styles for manual swapping (when fetching styles in `getAllUniqueStyles` function)

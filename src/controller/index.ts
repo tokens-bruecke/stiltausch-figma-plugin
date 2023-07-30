@@ -44,6 +44,8 @@ const init = async () => {
         ? figma.currentPage.findAll()
         : figma.root.findAll();
 
+      console.log("allNodes amount", allNodes.length);
+
       allAllowedNodes = getAllowedNodes(allNodes);
       const allUniqueStyles = await getAllUniqueStyles(allAllowedNodes);
 
@@ -182,7 +184,7 @@ const init = async () => {
         return;
       }
 
-      console.log("variableKey", variableKey);
+      // console.log("variableKey", variableKey);
 
       const swapVariable = await figma.variables.importVariableByKeyAsync(
         variableKey
