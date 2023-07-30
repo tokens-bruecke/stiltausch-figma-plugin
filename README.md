@@ -4,9 +4,17 @@
 
 StilTausch is a Figma plugin that allows you to swap styles with variables.
 
-⚠️ Note: This plugin works only with team libraries. Which means you need publish your library before you can swap styles.
+### ⚠️ Restrictions
 
-⚠️ Note: The plugin swaps only color styles.
+1. This plugin works only with team libraries. Which means you need publish your library before you can swap styles.
+2. The plugin swaps only color styles.
+3. Doens't work with INSTANCE components.
+
+---
+
+### Video demo (click to open)
+
+[![Video demo](./readme-assets/video-preview.webp)](https://www.loom.com/share/5384845dd4c94885b636944ce7520603?sid=07e7e264-d85a-49ad-82ab-42211599f5b0)
 
 ---
 
