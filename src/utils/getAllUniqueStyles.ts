@@ -27,7 +27,12 @@ export async function getAllUniqueStyles(nodes) {
 
   const clearNulls = allUniqueStyles.filter((style) => style !== null);
 
-  console.log("allUniqueStyles", clearNulls);
+  clearNulls.sort((a, b) => {
+    const nameA = a.name.toLowerCase();
+    const nameB = b.name.toLowerCase();
+
+    return nameA.localeCompare(nameB);
+  });
 
   return clearNulls;
 }

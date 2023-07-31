@@ -79,3 +79,7 @@ If you have any questions or suggestions, feel free to leave a comment on the [p
 ### 1.1.0
 
 - Added button `Select nodes with chosen style`
+
+### 1.1.1
+
+- Alphabetic sorting for styles in the list added
