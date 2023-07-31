@@ -61,6 +61,10 @@ const init = async () => {
         type: "setStyles",
         styles: allUniqueStyles,
       });
+
+      figma.notify(`Found ${allUniqueStyles.length} styles!`, {
+        timeout: 3000,
+      });
     }
 
     /* --------------------- */
@@ -217,6 +221,40 @@ const init = async () => {
       figma.notify(`Swapped ${swappedStylesCount} styles! 🎉`, {
         timeout: 3000,
       });
+    }
+
+    /* -------------------------------- */
+    /* -- Select elements with style -- */
+    /* -------------------------------- */
+
+    if (msg.type === "selectElementsWithStyle") {
+      const { styleId } = msg;
+
+      const allMatchingNodes = allAllowedNodes.filter((node) => {
+        const nodeStyleId = node.fillStyleId;
+
+        if (typeof nodeStyleId !== "string" || !nodeStyleId) {
+          return false;
+        }
+
+        return nodeStyleId === styleId;
+      });
+
+      const nodesToSelect = allMatchingNodes.filter((node) => {
+        const nodeStyleId = node.fillStyleId;
+
+        console.log("nodeStyleId", nodeStyleId);
+
+        if (typeof nodeStyleId !== "string" || !nodeStyleId) {
+          return false;
+        }
+
+        return nodeStyleId === styleId;
+      });
+
+      // console.log("nodesToSelect", nodesToSelect);
+
+      figma.currentPage.selection = nodesToSelect;
     }
 
     /* ---------------------- */

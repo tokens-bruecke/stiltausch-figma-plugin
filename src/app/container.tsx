@@ -359,7 +359,23 @@ const Container = () => {
 
             {isSwapManually && avaliableStyles.length > 0 && (
               <Panel hasLeftRightPadding>
-                <Stack hasTopBottomPadding>
+                <Stack hasTopBottomPadding gap={8}>
+                  <Button
+                    label="Select nodes with chosen style"
+                    secondary
+                    onClick={() => {
+                      parent.postMessage(
+                        {
+                          pluginMessage: {
+                            type: "selectElementsWithStyle",
+                            styleId: selectedStyle,
+                          },
+                        },
+                        "*"
+                      );
+                    }}
+                    fullWidth
+                  />
                   <Button
                     label="Refetch styles"
                     secondary

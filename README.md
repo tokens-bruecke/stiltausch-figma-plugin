@@ -75,3 +75,7 @@ If you have any questions or suggestions, feel free to leave a comment on the [p
 ### 1.0.1
 
 - Fixed a null styles for manual swapping (when fetching styles in `getAllUniqueStyles` function)
+
+### 1.1.0
+
+- Added button `Select nodes with chosen style`
